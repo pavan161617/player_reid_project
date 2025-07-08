@@ -1,0 +1,7 @@
+ultralytics==8.0.230
+opencv-python
+deep_sort_realtime
+numpy
+matplotlib
+seaborn
+pandas
