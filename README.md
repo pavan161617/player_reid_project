@@ -1,12 +1,16 @@
-# ⚽ Player Re-Identification from Single Video Feed
+# ⚽ AI-Powered Player Re-Identification in Sports Video  
+> Real-time Multi-Player Tracking & Re-ID from a Single Static Camera Feed
 
-This project implements **real-time player tracking and re-identification** using a 15-second soccer video. It ensures that each player maintains a **consistent ID**, even when they leave and re-enter the camera frame. The solution combines a fine-tuned **YOLOv11 object detection model** with the **Deep SORT** tracking algorithm.
+This project enables **real-time player detection, tracking, and re-identification** in a soccer video using a custom-trained **YOLOv11 model** and the **Deep SORT** tracking algorithm. It ensures that players who leave and re-enter the frame are consistently assigned the same ID.
 
 ---
 
-## 🧠 Problem Statement
+## 🚀 Project Overview
 
-> **Objective**: Track and re-identify players in a single video feed such that players who go out of frame and return are consistently assigned the same ID.
+- 🎯 **Goal**: Assign consistent player IDs across frames, even after temporary disappearance.  
+- 🧠 **Tech Stack**: YOLOv11 (object detection) + Deep SORT (tracking with re-ID).  
+- 📦 **Input**: 15-second soccer video.  
+- 📽️ **Output**: Processed video with bounding boxes and player IDs.
 
 ---
 
@@ -14,41 +18,38 @@ This project implements **real-time player tracking and re-identification** usin
 
 ```
 player_reid_project/
-├── main.py                  # Main script to run tracking
+├── main.py                  # Main tracking script
 ├── model/
-│   └── yolov11.pt           # Custom YOLOv11 model (downloaded separately)
+│   └── yolov11.pt           # YOLOv11 weights (download separately)
 ├── videos/
-│   └── 15sec_input_720p.mp4 # Input 15-second soccer video
+│   └── 15sec_input_720p.mp4 # Input soccer video
 ├── output/
-│   └── reid_output.mp4      # Output video with tracking results
-├── requirements.txt         # Python dependencies
-└── README.md                # Project documentation
+│   └── reid_output.mp4      # Output video with tracking
+├── requirements.txt         # Required Python libraries
+└── README.md                # Documentation
 ```
 
 ---
 
 ## ⚙️ Setup Instructions
 
-### ✅ 1. Create Virtual Environment (Recommended)
+### ✅ Step 1: Create & Activate Virtual Environment
 
 ```bash
 python -m venv venv
-# On Windows:
+# Activate (Windows):
 venv\Scripts\activate
-# On macOS/Linux:
+# Activate (macOS/Linux):
 source venv/bin/activate
 ```
 
----
-
-### ✅ 2. Install Dependencies
+### ✅ Step 2: Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
 **requirements.txt**
-
 ```
 ultralytics==8.0.230
 opencv-python
@@ -61,54 +62,71 @@ pandas
 
 ---
 
-## ▶️ How to Run the Project
+## 📥 Download Required Files
 
-### 🔽 1. Download Files
-
-- Download the YOLOv11 model from:  
-  👉 [Google Drive Model Link](https://drive.google.com/file/d/1-5fOSHOSB9UXyP_enOoZNAMScrePVcMD/view)  
+- **YOLOv11 Model Weights**  
+  📎 [Download yolov11.pt](https://drive.google.com/file/d/1-5fOSHOSB9UXyP_enOoZNAMScrePVcMD/view)  
   ➤ Save it as: `model/yolov11.pt`
 
-- Place the input video file `15sec_input_720p.mp4` inside the `videos/` folder.
+- **Video File**  
+  ➤ Place `15sec_input_720p.mp4` inside the `videos/` folder.
 
 ---
 
-### ▶️ 2. Run the Script
+## ▶️ Run the Tracker
 
 ```bash
 python main.py
 ```
 
-What it does:
-- Loads YOLOv11 and Deep SORT
-- Detects and tracks players frame-by-frame
-- Maintains consistent IDs for reappearing players
-- Saves the output to `output/reid_output.mp4`
-
-> ✅ Press `Q` in the preview window to stop early.
-
----
-
-## 📊 Output
-
-- 🎥 A video with consistent player IDs throughout  
-- ✅ Players who leave and re-enter are re-identified  
-- 📂 Output saved as: `output/reid_output.mp4`
+🔍 What happens:
+- Loads YOLOv11 and Deep SORT  
+- Detects players and assigns consistent IDs  
+- Renders bounding boxes + IDs on each frame  
+- Outputs the result to `output/reid_output.mp4`  
+- Press `Q` to stop early
 
 ---
 
-## 🔍 Detection Model
+## 📈 Features at a Glance
 
-- **YOLOv11**: A fine-tuned version of Ultralytics YOLO trained to detect players and the ball  
-- **Deep SORT**: Tracker using object motion & appearance for re-identification
+| Feature              | Description                                                       |
+|----------------------|-------------------------------------------------------------------|
+| ✅ Re-ID Support      | Players retain the same ID even after exiting and re-entering     |
+| ⚡ Real-Time Tracking | YOLOv11 + Deep SORT = Fast and Accurate                           |
+| 🧠 Appearance Matching| Tracks players using color/embedding features                     |
+| 💡 Simple Interface   | One-command run: `python main.py`                                 |
+
+---
+
+## 🔧 Under the Hood
+
+### 🔸 YOLOv11 Detector
+- Fine-tuned for footballer detection  
+- High precision, low latency  
+- Detects player & ball classes
+
+### 🔹 Deep SORT Tracker
+- Combines motion + visual embeddings  
+- Re-identifies players using cosine similarity  
+- Maintains identity during occlusions
+
+---
+
+## 🎥 Sample Output
+
+- 📂 Output saved as `output/reid_output.mp4`  
+- 🎯 Players retain consistent IDs across frames  
+- 🔖 Visualized using bounding boxes + ID tags
 
 ---
 
 ## 🛠️ Troubleshooting
 
-### ❌ Error: `'Detect' object has no attribute 'grid'`
+### ❌ `'Detect' object has no attribute 'grid'`
 
-You're likely using `torch.hub.load(...)` from an old version.  
+This usually happens when using an outdated method to load the model.
+
 ✅ Fix:
 
 ```python
@@ -116,36 +134,43 @@ from ultralytics import YOLO
 model = YOLO('model/yolov11.pt')
 ```
 
-Also ensure `ultralytics >= 8.0.0`.
+✔️ Also, ensure you have `ultralytics >= 8.0.0`.
 
 ---
 
-## 🚀 Future Work
+## 🚀 Future Enhancements
 
-- Add support for **cross-camera re-identification**
-- Web-based UI using **Streamlit** or **Flask**
-- Export tracking logs (IDs + coordinates)
-- Enable **live webcam** input
+- 🌐 Add cross-camera re-identification  
+- 📊 Export player logs (ID + frame + position)  
+- 🖥️ Build a Streamlit/Flask dashboard  
+- 📺 Enable webcam/live stream support  
+- 🐳 Provide Docker container setup
 
 ---
 
-## 👨‍💻 Author
+## 👤 Author
 
-**Vinay Manda**  
-🎓 Final Year – CSE (AI & ML)  
-🏆 Google Arcade Champion | AWS Cloud Intern | Web & AI Developer  
-
-📧 Email: [vinay456m@gmail.com](mailto:vinay456m@gmail.com)  
-🔗 LinkedIn: [Vinay Manda](https://www.linkedin.com/in/vinay-manda-b6811725a/)  
-🔗 GitHub: [github.com/Vinay1608m](https://github.com/Vinay1608m)
+**Pavan Kumar**  
+🎓 B.Tech CSE (AI), Pragati Engineering College  
+🌐 GitHub: [pavan161617](https://github.com/pavan161617)  
+🔗 LinkedIn: [pavan-kumar](https://www.linkedin.com/in/pavan-kumar-b7639125a/)  
+📧 Email: [pavan90990@gmail.com](mailto:pavan90990@gmail.com)
 
 ---
 
 ## 📄 License
 
 This project is licensed under the **MIT License**.  
-Use it freely with attribution.
+Feel free to fork, contribute, and share with attribution.
 
 ---
 
-⭐ If you found this project useful, give it a ⭐ on GitHub!
+## ⭐ Like This Project?
+
+If you found this useful:
+
+- ⭐ Star it on GitHub  
+- 🔄 Fork it and build on it  
+- 💬 Share feedback and open issues
+
+> “AI in sports is not the future — it’s the **present**. Let’s build smarter analytics together.”
