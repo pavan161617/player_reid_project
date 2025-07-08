@@ -172,5 +172,3 @@ If you found this useful:
 - ⭐ Star it on GitHub  
 - 🔄 Fork it and build on it  
 - 💬 Share feedback and open issues
-
-> “AI in sports is not the future — it’s the **present**. Let’s build smarter analytics together.”
